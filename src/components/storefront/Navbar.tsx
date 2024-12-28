@@ -10,8 +10,9 @@ import {
 import { LogsIcon, Menu, Search, ShoppingBag, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { NavbarNavigation } from "./NavbarNavigation";
+import { LoginLink } from "@kinde-oss/kinde-auth-nextjs/components";
 
 export function Navbar() {
   return (
@@ -27,9 +28,10 @@ export function Navbar() {
                 <div className="flex flex-col gap-6 text-lg font-medium mt-16 text-muted-foreground hover:text-foreground">
                 <NavbarNavigation/>
                 </div>
-                <Link href={"/login"}>
+                <LoginLink>
                     LOGIN
-                </Link>
+                </LoginLink>
+                
             </nav>
         </SheetContent>
       </Sheet>

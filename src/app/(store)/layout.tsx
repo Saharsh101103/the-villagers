@@ -1,4 +1,4 @@
-import { Navbar } from "@/components/Navbar";
+import { Navbar } from "@/components/storefront/Navbar";
 import { div } from "framer-motion/client";
 import type { Metadata } from "next";
 
@@ -14,7 +14,7 @@ export default function StoreLayout({
 }>) {
   return (
     <>
-      <header className="sticky top-0 h-16 border-b  px-4  md:px-56 my-auto flex flex-col justify-center">
+      <header className="sticky top-0 h-16 z-20 border-b  px-4  md:px-56 my-auto flex flex-col justify-center">
         <Navbar />
       </header>
       <main>{children}</main>
