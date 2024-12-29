@@ -16,7 +16,7 @@ import { LoginLink } from "@kinde-oss/kinde-auth-nextjs/components";
 
 export function Navbar() {
   return (
-    <div className="flex justify-between items-center">
+    <div className="flex justify-between items-center backdrop-blur-3xl">
       <Sheet>
         <SheetTrigger asChild>
           <Button className="shrink-0" variant="outline" size="icon">

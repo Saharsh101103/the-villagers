@@ -17,6 +17,9 @@ const nextConfig = {
           {
             hostname: 'lh3.googleusercontent.com',
           },
+          {
+            hostname: 'mhotnxrykauitctlgzwi.supabase.co',
+          },
         ],
       },
 };

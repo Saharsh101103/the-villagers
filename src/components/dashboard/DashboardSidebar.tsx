@@ -12,7 +12,7 @@ import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { usePathname } from "next/navigation";
 
 export function DashbaordSidebar({ children, user }: { children: React.ReactNode, user: KindeUser<Record<string, any>> }) {
-    const pathname = usePathname();
+  const pathname = usePathname();
   const links = [
     {
       label: "Dashboard",
@@ -100,7 +100,7 @@ export function DashbaordSidebar({ children, user }: { children: React.ReactNode
       </Sidebar>
 
 
-      <div className="flex-1 my-5 px-1 sm:px-6 lg:px-8 mx-auto">{children}</div>
+      <div className="flex-1 my-5 px-1 sm:px-6 lg:px-8 mx-auto overflow-y-scroll">{children}</div>
     </div>
   );
 }
@@ -127,7 +127,7 @@ export const LogoIcon = () => {
   return (
     <Link
       href="#"
-      className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20"
+      className="font-normal flex space-x-2 itˀems-center text-sm text-black py-1 relative z-20"
     >
       <div className="h-5 w-6 bg-black dark:bg-white rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" />
     </Link>
