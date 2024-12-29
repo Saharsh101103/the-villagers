@@ -257,9 +257,9 @@ export default function OrdersPage() {
         <CardTitle>Orders</CardTitle>
         <CardDescription>Recent orders from your store!</CardDescription>
 
-        <CardContent>
-            <ScrollArea className="h-[75vh]">
-          <Table>
+        <CardContent className="h-[75vh] md:h-[80h] overflow-scroll">
+            
+          <Table className="">
             <TableCaption>A list of your recent invoices.</TableCaption>
             <TableHeader >
               <TableRow>
@@ -288,7 +288,6 @@ export default function OrdersPage() {
                 }
             </TableBody>
           </Table>
-          </ScrollArea>
         </CardContent>
       </CardHeader>
     </Card>

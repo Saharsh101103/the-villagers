@@ -13,8 +13,14 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { NavbarNavigation } from "./NavbarNavigation";
 import { LoginLink } from "@kinde-oss/kinde-auth-nextjs/components";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { businessDetails } from "@/lib/data";
+import { UserDropdown } from "./UserDropdown";
 
-export function Navbar() {
+export async function Navbar() {
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+  const userEmail = user ? user.email : "";
   return (
     <div className="flex justify-between items-center backdrop-blur-3xl">
       <Sheet>
@@ -24,15 +30,39 @@ export function Navbar() {
           </Button>
         </SheetTrigger>
         <SheetContent side={"left"}>
-            <nav className="flex flex-col gap-6 text-lg font-medium  h-full justify-between">
-                <div className="flex flex-col gap-6 text-lg font-medium mt-16 text-muted-foreground hover:text-foreground">
-                <NavbarNavigation/>
+          <nav className="flex flex-col gap-6 text-lg font-medium  h-full justify-between">
+            <div className="flex flex-col gap-6 text-lg font-medium mt-16 text-muted-foreground hover:text-foreground">
+              <NavbarNavigation />
+            </div>
+
+            {user ? (
+              userEmail === businessDetails.adminEmail ? (
+                <Button size={"sm"} className="mr-2 hidden md:block">
+                  <Link href={"/dashboard"} className="hidden md:block">
+                    Dashboard
+                  </Link>
+                </Button>
+              ) : (
+                <div className="flex gap-2 items-center">
+                  <UserDropdown
+                    email={userEmail as string}
+                    name={user.given_name as string}
+                    userImage={
+                      user.picture ??
+                      `https://avatar.vercel.sh/${user.given_name}`
+                    }
+                  />
+                  <div className="flex flex-col">
+                    <p className="">{user.given_name}</p>  
+                    <p className="text-muted-foreground  text-sm">{user.email}</p>                    
+
+                  </div>
                 </div>
-                <LoginLink>
-                    LOGIN
-                </LoginLink>
-                
-            </nav>
+              )
+            ) : (
+              <LoginLink>LOGIN</LoginLink>
+            )}
+          </nav>
         </SheetContent>
       </Sheet>
       <div>
@@ -42,8 +72,8 @@ export function Navbar() {
       </div>
       <div className="flex items-center space-x-2 md:space-x-8">
         <User className="hidden md:block h-4 w-4 md:h-6 md:w-6" />
-        <Search className="h-4 w-4 md:h-6 md:w-6"/>
-        <ShoppingBag className="h-4 w-4 md:h-6 md:w-6"/>
+        <Search className="h-4 w-4 md:h-6 md:w-6" />
+        <ShoppingBag className="h-4 w-4 md:h-6 md:w-6" />
       </div>
     </div>
   );

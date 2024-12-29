@@ -224,7 +224,7 @@ export function EditForm({ data }: iAppProps) {
                   <Loader2 className="animate-spin text-gray-500 w-10 h-10" />
                 </div>
               ) : images.length > 0 ? (
-                <div className="flex gap-5">
+                <div className="grid grid-cols-2 md:flex gap-5">
                   {images.map((image, index) => (
                     <div key={index} className="relative w-[100px] h-[100px]">
                       <Image

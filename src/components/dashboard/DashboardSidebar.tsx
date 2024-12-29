@@ -100,7 +100,7 @@ export function DashbaordSidebar({ children, user }: { children: React.ReactNode
       </Sidebar>
 
 
-      <div className="flex-1 my-5 px-1 sm:px-6 lg:px-8 mx-auto overflow-y-scroll">{children}</div>
+      <div className="flex-1 my-5 px-1 sm:px-6 lg:px-8 mx-auto overflow-y-scroll max-w-xs md:max-w-full">{children}</div>
     </div>
   );
 }
