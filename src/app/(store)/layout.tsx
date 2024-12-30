@@ -1,3 +1,4 @@
+import Footer from "@/components/storefront/Footer";
 import { Navbar } from "@/components/storefront/Navbar";
 import { div } from "framer-motion/client";
 import type { Metadata } from "next";
@@ -18,6 +19,9 @@ export default function StoreLayout({
         <Navbar />
       </header>
       <main className="flex min-h-screen flex-col items-center justify-between py-4 overflow-x-hidden mx-auto">{children}</main>
+      <footer className="relative mt-20">
+        <Footer/>
+      </footer>
     </>
   );
 }

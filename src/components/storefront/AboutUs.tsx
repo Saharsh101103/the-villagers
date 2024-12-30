@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 export default function AboutUs() {
   return (
-    <section className="bg-background py-16 md:py-24">
+    <section className="bg-background my-8 md:my-8">
       <div className="container mx-auto px-4">
         <h2 className="mb-12 text-center text-3xl font-bold md:text-4xl">About Us</h2>
         <div className="grid gap-8 md:grid-cols-3">

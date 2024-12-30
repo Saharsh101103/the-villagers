@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import all from "../../../../public/all.jpg";
-import men from "../../../../public/men.jpg";
-import women from "../../../../public/women.jpg";
+import all from "../../../public/all.jpg";
+import men from "../../../public/men.jpg";
+import women from "../../../public/women.jpg";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
@@ -15,8 +15,7 @@ const categories: Category[] = [
 ]
 export function CategorySelection() {
   return (
-    <section className="py-16 bg-gradient-to-b from-gray-50 to-white">
-      <div className="container mx-auto px-4">
+      <div className="mx-auto w-full px-8">
         <h2 className="text-4xl font-bold mb-12 text-center">Explore Our Categories</h2>
         <div className="grid grid-cols-6 grid-rows-2 gap-4 h-[600px]">
           {categories.map((category, index) => (
@@ -37,13 +36,15 @@ export function CategorySelection() {
                   fill
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
-                  <div className="text-white">
+                  <div className="text-foreground">
                     <h3 className="text-2xl font-semibold mb-2">{category.name}</h3>
                     <Button 
                       variant="default" 
                       className=" transition-all duration-300 hover:scale-125"
                       >
-                      Explore
+                      <p className="hidden md:block">
+                        Explore
+                      </p>
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </div>
@@ -53,13 +54,12 @@ export function CategorySelection() {
             </Card>
           ))}
         </div>
-        <div className="mt-12 text-center">
-          <Button size="lg" className="text-lg px-8 py-6 bg-primary hover:bg-primary/90 text-white">
+        <Link className="mt-12 text-center block" href={"/products"}>
+          <Button size="lg" variant={"outline"}>
             Browse All Products
-            <ArrowRight className="ml-2 h-5 w-5" />
+            <ArrowRight className="ml-1 h-5 w-5" />
           </Button>
-        </div>
+        </Link>
       </div>
-    </section>
   )
 }

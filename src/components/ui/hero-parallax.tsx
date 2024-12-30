@@ -61,7 +61,7 @@ export const HeroParallax = ({
   return (
     <div
       ref={ref}
-      className="h-[300vh] py-40 overflow-hidden  antialiased relative flex flex-col self-auto [perspective:1000px] [transform-style:preserve-3d]"
+      className="h-[220vh] py-40 overflow-hidden  antialiased relative flex flex-col self-auto [perspective:1000px] [transform-style:preserve-3d]"
     >
       <Header />
       <motion.div
@@ -156,13 +156,13 @@ export const ProductCard = ({
         />
       </Link>
       <div className="absolute inset-0 h-full w-full opacity-0 group-hover/product:opacity-80 bg-black pointer-events-none"></div>
-      <h2 className="absolute top-4 left-4 opacity-0 group-hover/product:opacity-100 text-orange-500 text-2xl italic tracking-wide font-bold font-serif">
+      <h2 className="absolute top-4 left-4 opacity-0 group-hover/product:opacity-100 text-2xl  tracking-wide font-bold font-serif">
         {product.title}
       </h2>
-      <h2 className="absolute bottom-4 left-4 opacity-0 group-hover/product:opacity-100 text-blue-500">
+      <h2 className="absolute bottom-4 left-4 opacity-0 group-hover/product:opacity-100">
         {product.category}
       </h2>
-      <h2 className="absolute bottom-4 right-4 opacity-0 group-hover/product:opacity-100 text-green-500">
+      <h2 className="absolute bottom-4 right-4 opacity-0 group-hover/product:opacity-100 ">
       ₹{product.price}
       </h2>
     </motion.div>
