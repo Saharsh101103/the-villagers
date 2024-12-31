@@ -15,7 +15,7 @@ export default function StoreLayout({
 }>) {
   return (
     <>
-      <header className="sticky top-0 h-16 z-20 border-b  px-4  md:px-56 my-auto flex flex-col justify-center bg-background opacity-90">
+      <header className="sticky top-0 h-16 z-[1000] border-b  px-4  md:px-56 my-auto flex flex-col justify-center bg-background opacity-90">
         <Navbar />
       </header>
       <main className="flex min-h-screen flex-col items-center justify-between py-4 overflow-x-hidden mx-auto">{children}</main>

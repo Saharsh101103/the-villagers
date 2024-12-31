@@ -1,11 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client-js"
+  provider   = "prisma-client-js"
   engineType = "binary"
 }
 
@@ -15,45 +9,107 @@ datasource db {
 }
 
 model User {
-  id           String @id @unique
+  id           String     @id @unique
   email        String
   firstName    String
   lastName     String
   profileImage String
+  orders       Order[]    // User can have many orders
+  reviews      Review[]   // User can leave multiple reviews for products
+  addresses    Address[]  // User can have multiple shipping addresses
 
-  orders Order[]
-
-  createdAt DateTime @default(now())
+  createdAt    DateTime   @default(now())
 }
 
 model Product {
-  id          String        @id @default(uuid())
+  id          String           @id @default(uuid())
   name        String
   description String
   status      ProductStatus
   price       Int
-  images      String[]      
+  images      String[]         // List of image URLs for the product
   category    Category
-  isFeatured  Boolean       @default(false)
-  createdAt   DateTime      @default(now())
+  isFeatured  Boolean          @default(false)
+  variants    ProductVariant[] // Multiple variants of a product (size, color, etc.)
+  reviews     Review[]         // Products can have multiple reviews from users
+  createdAt   DateTime         @default(now())
+  orderItems  OrderItem[]      // Relation to order items (when the product is in an order)
+}
+
+model ProductVariant {
+  id        String  @id @default(uuid()) // Unique identifier for each variant (size, color)
+  color     String[]  // Color option for the product variant
+  size      String[]  // Size option for the product variant (if applicable)
+  stock     Int     // Number of items available for this variant
+  price     Int     // Price of this specific variant (could vary from base product)
+  productId String  // Foreign key linking to the product
+  product   Product @relation(fields: [productId], references: [id]) // Relation to Product model
 }
 
 model Banner {
-  id          String @id @default(uuid())
+  id          String   @id @default(uuid())
   title       String
-  imageString String 
+  imageString String   // Image for the banner (e.g., promotional banners)
   createdAt   DateTime @default(now())
 }
 
 model Order {
-  id     String @id @default(uuid())
-  status String @default("pending")
-  amount Int
+  id               String   @id @default(uuid()) 
+  status           String   @default("pending") // Order status (pending, shipped, etc.)
+  amount           Int      // Total amount of the order
+  userId           String?  // Optional foreign key for the user who placed the order
+  createdAt        DateTime @default(now())
+  user             User?    @relation(fields: [userId], references: [id]) // Relation to the User model
+  items            OrderItem[] // Orders contain multiple order items (products)
+  shippingAddressId String?   // Foreign key linking to the shipping address for this order
+  shippingAddress   Address?  @relation(fields: [shippingAddressId], references: [id]) // Relation to Address model
+}
 
-  User   User?   @relation(fields: [userId], references: [id])
-  userId String?
+model OrderItem {
+  id        String  @id @default(uuid())  // Unique identifier for each item in an order
+  quantity  Int     // Quantity of the product ordered
+  productId String  // Foreign key to the product ordered
+  product   Product @relation(fields: [productId], references: [id]) // Relation to the Product model
+  orderId   String  // Foreign key to the order this item belongs to
+  order     Order   @relation(fields: [orderId], references: [id]) // Relation to the Order model
+}
 
-  createdAt DateTime @default(now())
+model Address {
+  id         String  @id @default(uuid()) // Unique identifier for the address
+  street     String  // Street name and number
+  city       String  // City name
+  state      String  // State or region
+  postalCode String  // Postal or ZIP code
+  country    String  // Country name
+  userId     String  // Foreign key linking the address to the user
+  user       User    @relation(fields: [userId], references: [id]) // Relation to User model
+  order      Order[] // Relation to the orders that use this address (shipping address)
+  type       AddressType // New field to indicate if the address is shipping, billing, or both
+}
+
+enum AddressType {
+  shipping
+  billing
+  both
+}
+
+model Review {
+  id        String   @id @default(uuid()) // Unique identifier for the review
+  rating    Int      // Rating (usually 1 to 5 stars)
+  comment   String?  // Optional comment for the review
+  userId    String   // Foreign key linking the review to the user who wrote it
+  productId String   // Foreign key linking the review to the product
+  user      User     @relation(fields: [userId], references: [id]) // Relation to the User model
+  product   Product  @relation(fields: [productId], references: [id]) // Relation to the Product model
+  createdAt DateTime @default(now()) // Timestamp of when the review was created
+}
+
+
+model Discount {
+  id         String  @id @default(uuid()) // Unique identifier for the discount code
+  code       String  @unique // Discount code (e.g., "SAVE20")
+  percentage Int     // Percentage discount (e.g., 20 for 20% off)
+  active     Boolean @default(true) // Flag to indicate if the discount is active
 }
 
 enum ProductStatus {

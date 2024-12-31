@@ -22,11 +22,11 @@ export async function Navbar() {
   const user = await getUser();
   const userEmail = user ? user.email : "";
   return (
-    <div className="flex justify-between items-center backdrop-blur-3xl">
+    <div className="flex justify-between items-center">
       <Sheet>
         <SheetTrigger asChild>
-          <Button className="shrink-0" variant="outline" size="icon">
-            <Menu className="w-5 h-5" />
+          <Button className="shrink-0" variant="ghost" size="icon">
+            <Menu className="w-8 h-8" />
           </Button>
         </SheetTrigger>
         <SheetContent side={"left"}>
@@ -70,10 +70,16 @@ export async function Navbar() {
           <Image src={"/logo_long.png"} alt={""} width={128} height={36} />
         </Link>
       </div>
-      <div className="flex items-center space-x-2 md:space-x-8">
-        <User className="hidden md:block h-4 w-4 md:h-6 md:w-6" />
+      <div className="flex items-center space-x-2">
+      <Button className="shrink-0 hidden md:flex" variant="ghost" size="icon">
+        <User className=" h-4 w-4 md:h-6 md:w-6" />
+      </Button>
+      <Button className="shrink-0" variant="ghost" size="icon">
         <Search className="h-4 w-4 md:h-6 md:w-6" />
+      </Button>
+      <Button className="shrink-0" variant="ghost" size="icon">
         <ShoppingBag className="h-4 w-4 md:h-6 md:w-6" />
+      </Button>
       </div>
     </div>
   );

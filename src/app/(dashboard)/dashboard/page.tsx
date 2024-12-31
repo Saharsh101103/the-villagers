@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { businessDetails } from "@/lib/data";
+import prisma from "@/lib/db";
 import {
   BarChart3,
   IndianRupee,
@@ -17,32 +18,118 @@ import {
 } from "lucide-react";
 import React from "react";
 
-function Dashboard() {
-  const stats = [
+// Function to fetch revenue data from the database
+async function getRevenueData() {
+  const now = new Date();
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(now.getDate() - 7);
+
+  const data = await prisma.order.findMany({
+    where: {
+      createdAt: {
+        gte: sevenDaysAgo,
+      },
+    },
+    select: {
+      amount: true,
+      createdAt: true,
+    },
+    orderBy: {
+      createdAt: "asc",
+    },
+  });
+
+  const result = data.map((item) => ({
+    date: new Intl.DateTimeFormat("en-US").format(item.createdAt),
+    revenue: item.amount / 100, // Assuming the amount is in cents
+  }));
+
+  return result;
+}
+
+// Function to fetch overall stats from the database
+async function getStats() {
+  const totalRevenue = await prisma.order.aggregate({
+    _sum: {
+      amount: true,
+    },
+  });
+
+  const totalSales = await prisma.order.count();
+
+  const totalProducts = await prisma.product.count();
+
+  const totalUsers = await prisma.user.count();
+
+
+  return {
+    totalRevenue: totalRevenue._sum.amount! / 100, // Convert from cents to INR
+    totalSales,
+    totalProducts,
+    totalUsers,
+  };
+}
+
+
+async function getRecentOrders() {
+  // Fetch the 10 most recent orders along with user details (name, email, avatar)
+  const recentOrders = await prisma.order.findMany({
+    take: 10, // Limit the number of results to 10
+    orderBy: {
+      createdAt: 'desc', // Order by most recent orders
+    },
+    include: {
+      user: { // Explicitly include the related 'user' data
+        select: {
+          firstName: true,
+          email: true,
+          profileImage: true,
+        },
+      },
+    },
+  });
+
+  // Map the fetched data to the required format
+  const formattedOrders = recentOrders.map(order => ({
+    name: order.user?.firstName || "Unknown",  // Handle the case where user might be null
+    email: order.user?.email || "No email",  // Handle null user scenario
+    amount: (order.amount / 100).toFixed(2), // Assuming amount is in cents, convert to proper currency format
+    avatar: order.user?.profileImage || "",  // Fallback in case avatar is missing
+  }));
+
+  return formattedOrders;
+}
+
+export default async function Dashboard() {
+  const stats = await getStats();
+  const revenueData = await getRevenueData();
+  const recentSales = await getRecentOrders()
+
+  const statItems = [
     {
       title: "Total Revenue",
-      value: "₹123.23",
-      description: `Based on 100 Charges`,
+      value: `₹${stats.totalRevenue.toFixed(2)}`,
+      description: `Based on ${stats.totalSales} orders`,
       icon: IndianRupee,
       color: "green-500",
     },
     {
       title: "Total Sales",
-      value: "34",
+      value: stats.totalSales.toString(),
       description: `Total Sales on ${businessDetails.name}`,
       icon: ShoppingBag,
       color: "blue-500",
     },
     {
       title: "Total Products",
-      value: "23",
+      value: stats.totalProducts.toString(),
       description: `Current Products`,
       icon: Package,
       color: "indigo-500",
     },
     {
-      title: "Total User",
-      value: "34",
+      title: "Total Users",
+      value: stats.totalUsers.toString(),
       description: `Total Users Signed-in`,
       icon: Users,
       color: "orange-500",
@@ -51,10 +138,9 @@ function Dashboard() {
 
   return (
     <div className="flex-1 p-4 sm:px-6 lg:px-8 max-w-xs md:max-w-full">
-
-
+      {/* Stats Cards */}
       <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat) => (
+        {statItems.map((stat) => (
           <Card className="p-6" key={stat.title}>
             <div className="flex items-center justify-between space-x-4">
               <div className="flex items-center space-x-4">
@@ -72,7 +158,7 @@ function Dashboard() {
         ))}
       </div>
 
-      
+      {/* Revenue Over Time Chart */}
       <div className="hidden gap-4 md:grid md:grid-cols-2 lg:grid-cols-7 mt-4">
         <Card className="col-span-2 sm:col-span-1 md:col-span-2 lg:col-span-4 p-6">
           <CardHeader>
@@ -83,9 +169,11 @@ function Dashboard() {
               </div>
             </CardTitle>
           </CardHeader>
-          <RevenueChart />
+          {/* Pass data to RevenueChart */}
+          <RevenueChart chartData={revenueData} />
         </Card>
 
+        {/* Recent Sales */}
         <Card className="hidden lg:block col-span-2 sm:col-span-1 md:col-span-2 lg:col-span-3 p-6">
           <CardHeader>
             <CardTitle>
@@ -93,12 +181,10 @@ function Dashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <RecentSales />
+            <RecentSales recentSales={recentSales} />
           </CardContent>
         </Card>
       </div>
     </div>
   );
 }
-
-export default Dashboard;

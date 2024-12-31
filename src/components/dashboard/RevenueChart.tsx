@@ -17,20 +17,29 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
-const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 73 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
-  { month: "July", desktop: 214 },
-  { month: "August", desktop: 214 },
-  { month: "September", desktop: 214 },
-  { month: "October", desktop: 214 },
-  { month: "November", desktop: 214 },
-  { month: "December", desktop: 214 },
-]
+
+interface RevenueDataType {
+  date: string;
+  revenue: number;
+}
+
+interface RevenueChartProps{
+  chartData:  RevenueDataType[];
+}
+// const chartData = [
+//   { month: "January", desktop: 186 },
+//   { month: "February", desktop: 305 },
+//   { month: "March", desktop: 237 },
+//   { month: "April", desktop: 73 },
+//   { month: "May", desktop: 209 },
+//   { month: "June", desktop: 214 },
+//   { month: "July", desktop: 214 },
+//   { month: "August", desktop: 214 },
+//   { month: "September", desktop: 214 },
+//   { month: "October", desktop: 214 },
+//   { month: "November", desktop: 214 },
+//   { month: "December", desktop: 214 },
+// ]
 
 const chartConfig = {
   desktop: {
@@ -39,7 +48,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function RevenueChart() {
+export const RevenueChart: React.FC<RevenueChartProps> = ({ chartData }) => {
   return (
     <div>
       

@@ -180,8 +180,14 @@ const recentSales = [
       "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop&crop=faces",
   },
 ];
+interface RecentSalesProps{
+  name: string;
+  email: string;
+  amount: string;
+  avatar: string
+}
 
-export function RecentSales() {
+export function RecentSales({recentSales}  : {recentSales: RecentSalesProps[]}) {
   return (
     <ScrollArea className="h-[450px]">
     <div className="space-y-6">

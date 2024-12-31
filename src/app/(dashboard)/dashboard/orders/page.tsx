@@ -1,295 +1,91 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+'use client';
 
-const orders = [
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-    {
-        name: "John Snow",
-        email: "johnsnow@koimail.com",
-        status: "completed",
-        date: "12-04-23",
-        amount: "1300"
-    },
-]
+import { useEffect, useRef, useState } from 'react';
+import { useMediaQuery } from '@/hooks/use-media-query';
+import { useOrders } from '@/hooks/use-order';
+import { OrderCard } from '@/components/orders/order-card';
+import { OrdersPagination } from '@/components/orders/order-pagination';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function OrdersPage() {
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  const {
+    orders,
+    loading,
+    error,
+    hasMore,
+    total,
+    page,
+    setPage,
+    loadMore,
+    pageSize,
+  } = useOrders(isMobile);
+
+  const observerTarget = useRef(null);
+
+  useEffect(() => {
+    if (!isMobile) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          loadMore();
+        }
+      },
+      { threshold: 1.0 }
+    );
+
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current);
+    }
+
+    return () => observer.disconnect();
+  }, [isMobile, hasMore, loadMore]);
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-[50vh]">
+        <p className="text-destructive">Failed to load orders. Please try again later.</p>
+      </div>
+    );
+  }
+
+  const totalPages = Math.ceil(total / pageSize);
+
   return (
-    <Card>
-      <CardHeader className="px-2 py-7 md:px-7">
-        <CardTitle>Orders</CardTitle>
-        <CardDescription>Recent orders from your store!</CardDescription>
+    <div className="container mx-auto py-8 px-4 md:px-6">
+      <h1 className="text-3xl font-bold mb-8">Your Orders</h1>
+      
+      <ScrollArea className="h-[calc(100vh-12rem)]">
+        <div className="grid gap-4 md:gap-6">
+          {orders.map((order) => (
+            <OrderCard key={order.id} order={order} />
+          ))}
+          
+          {loading && (
+            <>
+              {[...Array(3)].map((_, i) => (
+                <Skeleton key={i} className="w-full h-[200px] rounded-lg" />
+              ))}
+            </>
+          )}
+          
+          {isMobile && hasMore && (
+            <div ref={observerTarget} className="h-8" />
+          )}
+        </div>
+      </ScrollArea>
 
-        <CardContent className="h-[75vh] md:h-[80h] overflow-scroll">
-            
-          <Table className="">
-            <TableCaption>A list of your recent invoices.</TableCaption>
-            <TableHeader >
-              <TableRow>
-                <TableHead className="w-[100px]">Customer</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead >Date</TableHead>
-                <TableHead className="text-right">Amount</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-                {
-                    orders.map((order) => (
-
-              <TableRow key={order.name}>
-                <TableCell className="font-medium">
-                    <p>Name</p>
-                    <p className="hidden md:flex text-sm text-muted-foreground">email</p>
-                </TableCell>
-                <TableCell>Order</TableCell>
-                <TableCell>Pending</TableCell>
-                <TableCell>123123</TableCell>
-                <TableCell className="text-right text-green-500">₹250.00</TableCell>
-              </TableRow>
-                    ))
-                }
-            </TableBody>
-          </Table>
-        </CardContent>
-      </CardHeader>
-    </Card>
+      {!isMobile && totalPages > 1 && (
+        <div className="mt-8 flex justify-center">
+          <OrdersPagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
+        </div>
+      )}
+    </div>
   );
 }

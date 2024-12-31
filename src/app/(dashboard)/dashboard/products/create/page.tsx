@@ -40,16 +40,31 @@ export default function ProductCreateRoute() {
   const [imageError, setImageError] = useState<string | null>(null); // Error message state for non-image files
   const [lastResult, action] = useFormState(createProduct, undefined);
   const [isUploading, setIsUploading] = useState(false); // Track upload status
+  const [productVariants, setProductVariants] = useState<{ color: string; size: string; stock: number }[]>([{color: "", size: "", stock: 0}]);
   const [form, fields] = useForm({
     lastResult,
 
     onValidate({ formData }) {
+      console.log(formData)
       return parseWithZod(formData, { schema: productSchema });
     },
 
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
   });
+
+  const handleVariantChange = (index: number, field: string, value: string | number) => {
+    const updatedVariants = [...productVariants];
+    updatedVariants[index] = { ...updatedVariants[index], [field]: value };
+    setProductVariants(updatedVariants);
+  };
+
+  const handleAddVariant = () => {
+    setProductVariants([
+      ...productVariants,
+      { color: "", size: "", stock: 0 },
+    ]);
+  };
 
   const handleDelete = (index: number) => {
     setImages(images.filter((_, i) => i !== index));
@@ -239,6 +254,48 @@ export default function ProductCreateRoute() {
               {imageError && <p className="text-red-500">{imageError}</p>}
 
               <p className="text-red-500">{fields.images.errors}</p>
+            </div>
+            <div className="flex flex-col gap-3">
+              <Label>Product Variants</Label>
+              <button
+                type="button"
+                onClick={handleAddVariant}
+                className="text-blue-500"
+              >
+                Add Variant
+              </button>
+              {productVariants.map((variant, index) => (
+                <div key={index} className="flex gap-4">
+                  <Input
+                  name={fields.color.name}
+                  key={fields.color.key}
+                    value={variant.color}
+                    onChange={(e) =>
+                      handleVariantChange(index, "color", e.target.value)
+                    }
+                    placeholder="Color"
+                  />
+                  <Input
+                    value={variant.size}
+                    name={fields.size.name}
+                    key={fields.size.key}
+                    onChange={(e) =>
+                      handleVariantChange(index, "size", e.target.value)
+                    }
+                    placeholder="Size"
+                  />
+                  <Input
+                    type="number"
+                    name={fields.stock.name}
+                    key={fields.stock.key}
+                    value={variant.stock}
+                    onChange={(e) =>
+                      handleVariantChange(index, "stock", +e.target.value)
+                    }
+                    placeholder="Stock"
+                  />
+                </div>
+              ))}
             </div>
           </div>
         </CardContent>

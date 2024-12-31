@@ -5,10 +5,9 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { ArrowLeftCircle, ImageIcon, LayoutDashboard, ListOrdered, LogOut, Package, Settings, User } from "lucide-react";
+import { ImageIcon, LayoutDashboard, ListOrdered, LogOut, Package } from "lucide-react";
 import { businessDetails } from "@/lib/data";
 import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/types";
-import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { usePathname } from "next/navigation";
 
 export function DashbaordSidebar({ children, user }: { children: React.ReactNode, user: KindeUser<Record<string, any>> }) {
