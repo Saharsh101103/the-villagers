@@ -26,45 +26,60 @@ import { useFormState } from "react-dom";
 import { useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { productSchema } from "@/lib/zodSchemas";
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { categories } from "@/lib/categories";
 import { createProduct } from "@/app/actions";
 import { SubmitButton } from "@/components/submitButton";
 import { useUpload } from "@/hooks/use-upload";
 import { FileUpload } from "@/components/ui/file-upload";
+import { VariantForm } from "@/components/dashboard/VariantForm";
+import { useProductForm } from "@/hooks/useProductForm";
+
 
 export default function ProductCreateRoute() {
   const [images, setImages] = useState<string[]>([]);
-  const [imageError, setImageError] = useState<string | null>(null); // Error message state for non-image files
+  const [imageError, setImageError] = useState<string | null>(null);
   const [lastResult, action] = useFormState(createProduct, undefined);
-  const [isUploading, setIsUploading] = useState(false); // Track upload status
-  const [productVariants, setProductVariants] = useState<{ color: string; size: string; stock: number }[]>([{color: "", size: "", stock: 0}]);
+  const [isUploading, setIsUploading] = useState(false);
+
+  
+  const {
+    variants: productVariants,
+    handleVariantChange,
+    addVariant,
+    removeVariant,
+  } = useProductForm();
+
   const [form, fields] = useForm({
     lastResult,
-
+    defaultValue: {
+      variants: productVariants,
+    },
     onValidate({ formData }) {
-      console.log(formData)
       return parseWithZod(formData, { schema: productSchema });
     },
-
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
   });
 
-  const handleVariantChange = (index: number, field: string, value: string | number) => {
-    const updatedVariants = [...productVariants];
-    updatedVariants[index] = { ...updatedVariants[index], [field]: value };
-    setProductVariants(updatedVariants);
-  };
-
-  const handleAddVariant = () => {
-    setProductVariants([
-      ...productVariants,
-      { color: "", size: "", stock: 0 },
-    ]);
-  };
+  useEffect(() => {
+    const formData = new FormData();
+    productVariants.forEach((variant, index) => {
+      variant.color.forEach((color) => {
+        formData.append(`variants[${index}].color[]`, color);
+      });
+      variant.size.forEach((size) => {
+        formData.append(`variants[${index}].size[]`, size);
+      });
+      formData.append(`variants[${index}].stock`, variant.stock.toString());
+    });
+    const plainObject: any = {};
+    formData.forEach((value, key) => {
+      plainObject[key] = value;
+    });
+    form.update(plainObject);
+  }, [productVariants, form]);
 
   const handleDelete = (index: number) => {
     setImages(images.filter((_, i) => i !== index));
@@ -72,37 +87,36 @@ export default function ProductCreateRoute() {
 
   const { upload, error } = useUpload({
     type: "product",
-    productId: "your-product-id", // Replace with the actual product ID
+    productId: "your-product-id",
   });
 
-  // Handle file upload with image validation
   const handleUpload = async (files: File[]) => {
     const validFiles: File[] = [];
 
-    // Check each file to see if it's an image
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       if (!file.type.startsWith("image/")) {
         setImageError("Please upload only image files.");
-        return; // Stop processing if any file is not an image
+        return;
       } else {
         validFiles.push(file);
       }
     }
 
-    setImageError(null); // Clear any previous error
+    setImageError(null);
 
     try {
-      setIsUploading(true); // Set uploading state to true
-      const results = await upload(validFiles); // Handle the actual file upload
-      setImages(results.map((r) => r)); // Set the uploaded images
+      setIsUploading(true);
+      const results = await upload(validFiles);
+      setImages(results.map((r) => r));
     } catch (err) {
       console.error(err);
     } finally {
-      setIsUploading(false); // Reset uploading state when done
+      setIsUploading(false);
     }
   };
-
+  
+  console.log(form.value?.variants)
   return (
     <form id={form.id} onSubmit={form.onSubmit} action={action}>
       <div className="flex items-center gap-4">
@@ -218,7 +232,7 @@ export default function ProductCreateRoute() {
                 name={fields.images.name}
                 defaultValue={fields.images.initialValue as any}
               />
-              
+
               {isUploading ? (
                 <div className="flex justify-center items-center h-96">
                   <Loader2 className="animate-spin text-gray-500 w-10 h-10" />
@@ -250,52 +264,34 @@ export default function ProductCreateRoute() {
                 </div>
               )}
 
-              {/* Display error if there are non-image files */}
               {imageError && <p className="text-red-500">{imageError}</p>}
-
               <p className="text-red-500">{fields.images.errors}</p>
             </div>
+
             <div className="flex flex-col gap-3">
               <Label>Product Variants</Label>
-              <button
+              <div className="space-y-4">
+                {productVariants.map((variant, index) => (
+                  <VariantForm
+                    key={index}
+                    variant={variant}
+                    index={index}
+                    variantFields={fields.variants.getFieldList()[index]?.getFieldset()}
+                    onVariantChange={handleVariantChange}
+                    onRemoveVariant={removeVariant}
+                    isRemoveDisabled={productVariants.length === 1}
+                  />
+                ))}
+              </div>
+              
+              <Button
                 type="button"
-                onClick={handleAddVariant}
-                className="text-blue-500"
+                variant="outline"
+                onClick={addVariant}
+                className="mt-2"
               >
                 Add Variant
-              </button>
-              {productVariants.map((variant, index) => (
-                <div key={index} className="flex gap-4">
-                  <Input
-                  name={fields.color.name}
-                  key={fields.color.key}
-                    value={variant.color}
-                    onChange={(e) =>
-                      handleVariantChange(index, "color", e.target.value)
-                    }
-                    placeholder="Color"
-                  />
-                  <Input
-                    value={variant.size}
-                    name={fields.size.name}
-                    key={fields.size.key}
-                    onChange={(e) =>
-                      handleVariantChange(index, "size", e.target.value)
-                    }
-                    placeholder="Size"
-                  />
-                  <Input
-                    type="number"
-                    name={fields.stock.name}
-                    key={fields.stock.key}
-                    value={variant.stock}
-                    onChange={(e) =>
-                      handleVariantChange(index, "stock", +e.target.value)
-                    }
-                    placeholder="Stock"
-                  />
-                </div>
-              ))}
+              </Button>
             </div>
           </div>
         </CardContent>

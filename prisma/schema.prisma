@@ -25,6 +25,7 @@ model Product {
   id          String           @id @default(uuid())
   name        String
   description String
+  shippingInfo String         @default("Shipping Charges may apply!")
   status      ProductStatus
   price       Int
   images      String[]         // List of image URLs for the product
@@ -41,7 +42,6 @@ model ProductVariant {
   color     String[]  // Color option for the product variant
   size      String[]  // Size option for the product variant (if applicable)
   stock     Int     // Number of items available for this variant
-  price     Int     // Price of this specific variant (could vary from base product)
   productId String  // Foreign key linking to the product
   product   Product @relation(fields: [productId], references: [id]) // Relation to Product model
 }

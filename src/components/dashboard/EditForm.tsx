@@ -26,13 +26,13 @@ import { Switch } from "@/components/ui/switch";
 import Image from "next/image";
 
 import { categories } from "@/lib/categories";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFormState } from "react-dom";
 import { createProduct, editProduct } from "@/app/actions";
 import { useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { productSchema } from "@/lib/zodSchemas";
-import { type $Enums } from "@prisma/client";
+import { ProductVariant, type $Enums } from "@prisma/client";
 import { SubmitButton } from "../submitButton";
 import { FileUpload } from "../ui/file-upload";
 import { useUpload } from "@/hooks/use-upload";
@@ -48,14 +48,38 @@ interface iAppProps {
     images: string[];
     category: $Enums.Category;
     isFeatured: boolean;
+    variants: ProductVariant[];
+    color: string;
+    size: string;
+    stock: number;
   };
 }
+type Variant = {
+  color: string;
+  size: string;
+  stock: number;
+};
 
 export function EditForm({ data }: iAppProps) {
   const [images, setImages] = useState<string[]>(data.images);
   const [imageError, setImageError] = useState<string | null>(null); // Error message for invalid file type
   const [lastResult, action] = useFormState(editProduct, undefined);
   const [isUploading, setIsUploading] = useState(false); // Track the upload state
+  const newColor = data.variants.map((variant) => variant.color.join(","));
+  const newSize = data.variants.map((variant) => variant.size.join(","));
+  const transformedVariants = data.variants.map((variant) => ({
+    color: newColor.join(","),
+    size: newSize.join(","),
+    stock: variant.stock,
+  }));
+  
+  const [productVariants, setProductVariants] = useState<Variant[]>(transformedVariants);
+ 
+  
+
+
+
+
   const [form, fields] = useForm({
     lastResult,
 
@@ -66,6 +90,19 @@ export function EditForm({ data }: iAppProps) {
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
   });
+
+  const handleVariantChange = (index: number, field: string, value: string | number) => {
+    const updatedVariants = [...productVariants];
+    updatedVariants[index] = { ...updatedVariants[index], [field]: value };
+    setProductVariants(updatedVariants);
+  };
+
+  const handleAddVariant = () => {
+    setProductVariants([
+      ...productVariants,
+      { color: "", size: "", stock: 0 },
+    ]);
+  };
 
   const handleDelete = (index: number) => {
     setImages(images.filter((_, i) => i !== index));
@@ -102,6 +139,7 @@ export function EditForm({ data }: iAppProps) {
       setIsUploading(false); // Reset uploading state when done
     }
   };
+
 
   return (
     <form id={form.id} onSubmit={form.onSubmit} action={action}>
@@ -254,6 +292,56 @@ export function EditForm({ data }: iAppProps) {
               {imageError && <p className="text-red-500">{imageError}</p>}
 
               <p className="text-red-500">{fields.images.errors}</p>
+            </div>
+            <div className="flex flex-col gap-3">
+              <Label>Product Variants</Label>
+              {data.variants.map((variant, index) => (
+                <div key={index} className="flex gap-4">
+                  <div className="w-full">
+                  <Input
+                  name={`variants[${index}].color`}
+                  key={fields.variants.getFieldList().at(index)?.getFieldset().color.key}
+                    value={variant.color}
+                    onChange={(e) =>
+                      handleVariantChange(index, "color", e.target.value)
+                    }
+                    placeholder="Color"
+                    disabled
+                  />
+              <p className="text-red-500">{fields.variants.getFieldList().at(index)?.getFieldset().color.errors}</p>
+                  </div>
+                  <div className="w-full">
+                  <Input
+                    value={variant.size}
+                    name={`variants[${index}].size`}
+                    key={fields.variants.getFieldList().at(index)?.getFieldset().size.key}
+                    onChange={(e) =>
+                      handleVariantChange(index, "size", e.target.value)
+                    }
+                    placeholder="Size"
+                    disabled
+                  />
+              <p className="text-red-500">{fields.variants.getFieldList().at(index)?.getFieldset().size.errors}</p>
+
+                  </div>
+                  <div className="w-full">
+
+                  <Input
+                    type="number"
+                    name={`variants[${index}].stock`}
+                    key={fields.variants.getFieldList().at(index)?.getFieldset().stock.key}
+                    value={variant.stock}
+                    onChange={(e) =>
+                      handleVariantChange(index, "stock", +e.target.value)
+                    }
+                    placeholder="Stock"
+                    disabled
+                  />
+              <p className="text-red-500">{fields.variants.getFieldList().at(index)?.getFieldset().stock.errors}</p>
+
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </CardContent>

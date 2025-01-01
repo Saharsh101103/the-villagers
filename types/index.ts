@@ -1,3 +1,4 @@
+import { productSchema } from "@/lib/zodSchemas";
 import { StaticImageData } from "next/image";
 
 export interface Product {
@@ -44,4 +45,21 @@ export interface Product {
     pageSize: number;
   }
   
+  export type ProductVariant = {
+    color: string[];
+    size: string[];
+    stock: number;
+  };
   
+
+  
+  export type VariantField = keyof ProductVariant;
+  export type VariantValue = ProductVariant[VariantField];
+  
+  export interface VariantFieldProps {
+    name: string;
+    value: string[] | number;
+    onChange: (value: string[] | number) => void;
+    error?: string;
+    placeholder: string;
+  }

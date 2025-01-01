@@ -18,8 +18,9 @@ export default async function ProductPage({ params }: { params: { id: string } }
       name: true,
       id: true,
       category: true,
-    },
-  });
+      shippingInfo: true,
+      variants: true,
+  }});
   if (!product) {
     notFound();
   }

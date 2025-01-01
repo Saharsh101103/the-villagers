@@ -33,6 +33,12 @@ export async function createProduct(prevState: unknown, formData: FormData) {
     urlString.split(",").map((url) => url.trim())
   );
 
+  const variants = submission.value.variants.map((variant) => ({
+    color: variant.color,
+    size: variant.size,
+    stock: variant.stock,
+  }));
+try {
   await prisma.product.create({
     data: {
       name: submission.value.name,
@@ -42,8 +48,15 @@ export async function createProduct(prevState: unknown, formData: FormData) {
       images: flattenUrls,
       category: submission.value.category,
       isFeatured: submission.value.isFeatured === true ? true : false,
+      variants: {
+        create: variants, // This is the correct format for nested creation
+      },
     },
   });
+
+} catch (error) {
+  console.error(error)
+}
 
   redirect("/dashboard/products");
 }
@@ -69,20 +82,25 @@ export async function editProduct(prevState: any, formData: FormData) {
   );
 
   const productId = formData.get("productId") as string;
-  await prisma.product.update({
-    where: {
-      id: productId,
-    },
-    data: {
-      name: submission.value.name,
-      description: submission.value.description,
-      category: submission.value.category,
-      price: submission.value.price,
-      isFeatured: submission.value.isFeatured === true ? true : false,
-      status: submission.value.status,
-      images: flattenUrls,
-    },
-  });
+  try {
+    await prisma.product.update({
+      where: {
+        id: productId,
+      },
+      data: {
+        name: submission.value.name,
+        description: submission.value.description,
+        category: submission.value.category,
+        price: submission.value.price,
+        isFeatured: submission.value.isFeatured === true ? true : false,
+        status: submission.value.status,
+        images: flattenUrls,
+      },
+    });
+  } catch (error) {
+    console.log(error)
+  }
+  
 
   redirect("/dashboard/products");
 }
