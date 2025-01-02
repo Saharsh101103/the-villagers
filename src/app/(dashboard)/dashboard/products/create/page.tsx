@@ -43,7 +43,7 @@ export default function ProductCreateRoute() {
   const [lastResult, action] = useFormState(createProduct, undefined);
   const [isUploading, setIsUploading] = useState(false);
 
-  
+
   const {
     variants: productVariants,
     handleVariantChange,
@@ -66,12 +66,11 @@ export default function ProductCreateRoute() {
   useEffect(() => {
     const formData = new FormData();
     productVariants.forEach((variant, index) => {
-      variant.color.forEach((color) => {
-        formData.append(`variants[${index}].color[]`, color);
-      });
-      variant.size.forEach((size) => {
-        formData.append(`variants[${index}].size[]`, size);
-      });
+
+      formData.append(`variants[${index}].color[]`, variant.color);
+
+
+      formData.append(`variants[${index}].size[]`, variant.size);
       formData.append(`variants[${index}].stock`, variant.stock.toString());
     });
     const plainObject: any = {};
@@ -115,7 +114,7 @@ export default function ProductCreateRoute() {
       setIsUploading(false);
     }
   };
-  
+
   console.log(form.value?.variants)
   return (
     <form id={form.id} onSubmit={form.onSubmit} action={action}>
@@ -283,7 +282,7 @@ export default function ProductCreateRoute() {
                   />
                 ))}
               </div>
-              
+
               <Button
                 type="button"
                 variant="outline"

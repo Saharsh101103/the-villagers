@@ -65,8 +65,8 @@ export function EditForm({ data }: iAppProps) {
   const [imageError, setImageError] = useState<string | null>(null); // Error message for invalid file type
   const [lastResult, action] = useFormState(editProduct, undefined);
   const [isUploading, setIsUploading] = useState(false); // Track the upload state
-  const newColor = data.variants.map((variant) => variant.color.join(","));
-  const newSize = data.variants.map((variant) => variant.size.join(","));
+  const newColor = data.variants.map((variant) => variant.color);
+  const newSize = data.variants.map((variant) => variant.size);
   const transformedVariants = data.variants.map((variant) => ({
     color: newColor.join(","),
     size: newSize.join(","),

@@ -5,7 +5,7 @@ export function useProductForm(initialVariants: ProductVariant[] = []) {
   const [variants, setVariants] = useState<ProductVariant[]>(
     initialVariants.length > 0
       ? initialVariants
-      : [{ color: [], size: [], stock: 0 }]
+      : [{ color: "", size: "", stock: 0 }]
   );
 
   const handleVariantChange = useCallback(
@@ -23,7 +23,7 @@ export function useProductForm(initialVariants: ProductVariant[] = []) {
   );
 
   const addVariant = useCallback(() => {
-    setVariants((prev) => [...prev, { color: [], size: [], stock: 0 }]);
+    setVariants((prev) => [...prev, { color: "", size: "", stock: 0 }]);
   }, []);
 
   const removeVariant = useCallback((index: number) => {

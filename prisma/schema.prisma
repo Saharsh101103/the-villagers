@@ -39,8 +39,8 @@ model Product {
 
 model ProductVariant {
   id        String  @id @default(uuid()) // Unique identifier for each variant (size, color)
-  color     String[]  // Color option for the product variant
-  size      String[]  // Size option for the product variant (if applicable)
+  color     String  // Color option for the product variant
+  size      String  // Size option for the product variant (if applicable)
   stock     Int     // Number of items available for this variant
   productId String  // Foreign key linking to the product
   product   Product @relation(fields: [productId], references: [id]) // Relation to Product model

@@ -27,9 +27,8 @@ interface ProductInfoProps {
 
 export function ProductInfo({ product }: ProductInfoProps) {
 
-  function parseStrings(colorStrings: string[]): string[] {
-    const allColors = colorStrings
-      .flatMap((colorString) => colorString.split(",")) // Split each string by commas and flatten the arrays
+  function parseStrings(colorStrings: string[]){
+    const allColors = colorStrings // Split each string by commas and flatten the arrays
       .map((color) => color.trim()) // Trim whitespace around each color
       .filter(Boolean); // Remove empty strings
     

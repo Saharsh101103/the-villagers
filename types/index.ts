@@ -46,8 +46,8 @@ export interface Product {
   }
   
   export type ProductVariant = {
-    color: string[];
-    size: string[];
+    color: string;
+    size: string;
     stock: number;
   };
   
@@ -58,8 +58,8 @@ export interface Product {
   
   export interface VariantFieldProps {
     name: string;
-    value: string[] | number;
-    onChange: (value: string[] | number) => void;
+    value: string | number;
+    onChange: (value: string | number) => void;
     error?: string;
     placeholder: string;
   }

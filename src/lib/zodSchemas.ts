@@ -9,8 +9,8 @@ export const productSchema = z.object({
   category: z.enum(["men", "women", "kids"]),
   isFeatured: z.boolean().optional(),
   variants: z.array(z.object({
-    color: z.array(z.string()).min(1, "At least one color is required"),
-    size: z.array(z.string()).min(1, "At least one size is required"),
+    color: z.string(),
+    size: z.string(),
     stock: z.number().min(0, "Stock cannot be negative"),
   })).min(1, "At least one variant is required"),
 });

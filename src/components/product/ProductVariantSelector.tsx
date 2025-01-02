@@ -5,11 +5,10 @@ import { SizeSelector } from "./SizeSelector";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import { ProductVariant } from "../../../types";
 import { cn } from "@/lib/utils";
-import { color } from "framer-motion";
 
 interface Variant {
-  color: string[];
-  size: string[];
+  color: string;  // Updated from string[] to string
+  size: string;   // Updated from string[] to string
   stock: number;
 }
 
@@ -19,18 +18,9 @@ interface ProductVariantProps {
 }
 
 export function ProductVariantSelector({ variants, parseStrings }: ProductVariantProps) {
-  const [selectedColor, setSelectedColor] = useState<string>(() => {
-    const initialColors = variants[0].color
-      .flatMap((colorString) => colorString.split(",").map((color) => color.trim()));
-    return initialColors[0];
-  });
-
-  const [selectedSize, setSelectedSize] = useState<string | null>(() => {
-    const initialSizes = variants[0].size
-      .flatMap((sizeString) => sizeString.split(",").map((size) => size.trim()));
-    return initialSizes[0] || null;
-  });
-
+  // Initialize selectedColor and selectedSize based on the first variant
+  const [selectedColor, setSelectedColor] = useState<string>(() => variants[0].color);
+  const [selectedSize, setSelectedSize] = useState<string | null>(() => variants[0].size || null);
   const [quantity, setQuantity] = useState<number>(1);
 
   // Function to calculate stock for the selected color and size
@@ -39,14 +29,7 @@ export function ProductVariantSelector({ variants, parseStrings }: ProductVarian
 
     let totalStock = 0;
     variants.forEach((variant) => {
-      const colors = variant.color.flatMap((colorString) =>
-        colorString.split(",").map((color) => color.trim())
-      );
-      const sizes = variant.size.flatMap((sizeString) =>
-        sizeString.split(",").map((size) => size.trim())
-      );
-
-      if (colors.includes(color) && sizes.includes(size)) {
+      if (variant.color === color && variant.size === size) {
         totalStock += variant.stock;
       }
     });
@@ -63,28 +46,20 @@ export function ProductVariantSelector({ variants, parseStrings }: ProductVarian
 
     const options = new Set<string>();
     variants.forEach((variant) => {
-      const colors = variant.color.flatMap((colorString) =>
-        colorString.split(",").map((color) => color.trim())
-      );
-      const sizes = variant.size.flatMap((sizeString) =>
-        sizeString.split(",").map((size) => size.trim())
-      );
-
-      if (type === "color" && colors.includes(input)) {
-        sizes.forEach((size) => options.add(size));
+      if (type === "color" && variant.color === input) {
+        options.add(variant.size);
       }
 
-      if (type === "size" && sizes.includes(input)) {
-        colors.forEach((color) => options.add(color));
+      if (type === "size" && variant.size === input) {
+        options.add(variant.color);
       }
     });
 
     return Array.from(options);
   }
 
-  const colors = parseStrings(variants.map((variant) => variant.color).flat());
-  const sizes = parseStrings(variants.map((variant) => variant.size).flat());
-
+  const colors = parseStrings(variants.map((variant) => variant.color)); // Assuming parseStrings works with single strings
+  const sizes = parseStrings(variants.map((variant) => variant.size)); // Same for sizes
 
   const availableSizes = selectedColor
     ? getAvailableOptions(variants, selectedColor, "color")
@@ -99,7 +74,16 @@ export function ProductVariantSelector({ variants, parseStrings }: ProductVarian
         setSelectedSize(null);
       }
     }
-  }, [selectedColor, selectedSize, variants, colors]);
+  }, [selectedColor, selectedSize, variants]);
+  console.log("selectedColor", selectedColor);
+  console.log("selectedSize", selectedSize);
+  console.log("quantity", quantity);
+  console.log("stockForSelection", stockForSelection);
+  console.log("colors", colors);
+  console.log("sizes", sizes);
+  console.log("availableSizes", availableSizes);
+  console.log("variants", variants);
+  
 
   return (
     <div className="space-y-6">
@@ -114,9 +98,15 @@ export function ProductVariantSelector({ variants, parseStrings }: ProductVarian
         onSizeChange={setSelectedSize}
       />
       <div>
-        <h3 className={cn(stockForSelection === 0 ? "font-medium mb-2 text-destructive" : stockForSelection===1 ? "font-medium mb-2 text-yellow-500" : " font-medium mb-2 text-green-500")}>{stockForSelection > 0
-            ? stockForSelection<11 && stockForSelection>1 ?  `Hurry up! Only ${stockForSelection} units remaining` : stockForSelection == 1 ? "Only last piece remaining" :  `In Stock`  
-            : "Out of Stock"}</h3>
+        <h3 className={cn(stockForSelection === 0 ? "font-medium mb-2 text-destructive" : stockForSelection === 1 ? "font-medium mb-2 text-yellow-500" : "font-medium mb-2 text-green-500")}>
+          {stockForSelection > 0
+            ? stockForSelection < 11 && stockForSelection > 1
+              ? `Hurry up! Only ${stockForSelection} units remaining`
+              : stockForSelection == 1
+              ? "Only last piece remaining"
+              : `In Stock`
+            : "Out of Stock"}
+        </h3>
       </div>
       <div>
         <h3 className="font-medium mb-2">Quantity</h3>
