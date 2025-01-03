@@ -16,6 +16,7 @@ import { LoginLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { businessDetails } from "@/lib/data";
 import { UserDropdown } from "./UserDropdown";
+import Cart from "../Cart";
 
 export async function Navbar() {
   const { getUser } = getKindeServerSession();
@@ -95,9 +96,9 @@ export async function Navbar() {
       {
         user &&
         
-      <Button className="shrink-0" variant="ghost" size="icon">
-        <ShoppingBag className="h-4 w-4 md:h-6 md:w-6" />
-      </Button>
+
+        <Cart  />
+
       }
       </div>
     </div>
