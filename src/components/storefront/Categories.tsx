@@ -9,9 +9,9 @@ import { ArrowRight } from "lucide-react";
 import { Category } from "../../../types";
 
 const categories: Category[] = [
-  { id: "1", name: "All Products", imageUrl: all, url: "/shop/products/all" },
-  { id: "2", name: "Men", imageUrl: men, url: "/shop/products/men" },
-  { id: "3", name: "Women", imageUrl: women, url: "/shop/products/women" },
+  { id: "1", name: "All Products", imageUrl: all, url: "/products/all" },
+  { id: "2", name: "Men", imageUrl: men, url: "/products/men" },
+  { id: "3", name: "Women", imageUrl: women, url: "/products/women" },
 ]
 export function CategorySelection() {
   return (
@@ -54,7 +54,7 @@ export function CategorySelection() {
             </Card>
           ))}
         </div>
-        <Link className="mt-12 text-center block" href={"/products"}>
+        <Link className="mt-12 text-center block" href={"/products/all"}>
           <Button size="lg" variant={"outline"}>
             Browse All Products
             <ArrowRight className="ml-1 h-5 w-5" />

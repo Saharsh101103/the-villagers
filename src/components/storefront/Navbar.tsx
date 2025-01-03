@@ -71,15 +71,34 @@ export async function Navbar() {
         </Link>
       </div>
       <div className="flex items-center space-x-2">
+        {user ?
+        <Link href={`/profile/${user.id}`}>
       <Button className="shrink-0 hidden md:flex" variant="ghost" size="icon">
         <User className=" h-4 w-4 md:h-6 md:w-6" />
       </Button>
+        </Link> :
+        <LoginLink>
+          <Button variant={"outline"} className="flex items-center">
+            <User className=" h-4 w-4 md:h-6 md:w-6" />
+            <p>
+
+          LOGIN
+            </p>
+          </Button>
+          </LoginLink>
+        }
+      <Link href={"/products/all"}>
       <Button className="shrink-0" variant="ghost" size="icon">
         <Search className="h-4 w-4 md:h-6 md:w-6" />
       </Button>
+      </Link>
+      {
+        user &&
+        
       <Button className="shrink-0" variant="ghost" size="icon">
         <ShoppingBag className="h-4 w-4 md:h-6 md:w-6" />
       </Button>
+      }
       </div>
     </div>
   );

@@ -1,5 +1,36 @@
 import { productSchema } from "@/lib/zodSchemas";
+import { Address } from "@prisma/client";
 import { StaticImageData } from "next/image";
+
+
+export type User = {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  profileImage: string;
+  orders: Order[];
+  reviews: Review[];
+  addresses: Address[];
+  createdAt: Date;
+};
+
+export type Review = {
+  id: string;
+  rating: number;
+  comment: string | null;
+  userId: string;
+  productId: string;
+  createdAt: Date;
+};
+
+export enum AddressType {
+  shipping = 'shipping',
+  billing = 'billing',
+  both = 'both',
+}
+
+
 
 export interface Product {
     id: string;
@@ -8,7 +39,13 @@ export interface Product {
     price: number;
     imageUrl: string;
     category: string;
+    images: string[];
+    shippingInfo?: string;
+    status?: ProductStatus;
+    isFeatured?: boolean;
+    variant: ProductVariant[];
   }
+
   
   export interface Category {
     id: string;
@@ -63,3 +100,11 @@ export interface Product {
     error?: string;
     placeholder: string;
   }
+
+  export enum ProductStatus {
+    AVAILABLE = 'AVAILABLE',
+    OUT_OF_STOCK = 'OUT_OF_STOCK',
+    COMING_SOON = 'COMING_SOON'
+  }
+
+  

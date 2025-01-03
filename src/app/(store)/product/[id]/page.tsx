@@ -20,6 +20,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
       category: true,
       shippingInfo: true,
       variants: true,
+      createdAt: true,
   }});
   if (!product) {
     notFound();

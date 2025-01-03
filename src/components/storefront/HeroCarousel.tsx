@@ -1,11 +1,52 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { HeroParallax } from "../ui/hero-parallax";
-import { div } from "framer-motion/client";
+import { div, i, p } from "framer-motion/client";
+import axios from "axios";
+
+type Product = {
+  title: string;
+  link: string;
+  thumbnail: string;
+  price: string;
+  category: string;
+};
+
+
+
 
 export function HeroCaraosel() {
+  const [Products, setProducts] = useState<Product[]>([])
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/api/store/get-products");
+  
+        // Transform the data to match the required structure
+        const formattedProducts: Product[] = response.data.map((product: any) => ({
+          title: product.name || "Untitled", // Fallback for missing fields
+          link: `/product/${product.id}` || "",
+          thumbnail: product.images[0] || "",
+          price: product.price ? `${product.price}` : "N/A", // Add currency symbol
+          category: product.category || "Uncategorized",
+        }));
+  
+        setProducts(formattedProducts);
+      } catch (error) {
+        console.error("Failed to fetch products:", error);
+      }
+    };
+  
+    fetchData();
+  }, []);
+
+  
+  
   return <HeroParallax products={products} />;
 }
+
+
+
 
 // Mocked
 export const products = [

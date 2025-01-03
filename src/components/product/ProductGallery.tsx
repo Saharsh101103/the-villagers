@@ -18,6 +18,8 @@ export function ProductGallery({ images }: { images: { id: string; url: string; 
           className="object-cover"
           priority
         />
+        
+
       </div>
       <div className="grid grid-cols-3 gap-4">
         {images.map((image) => (

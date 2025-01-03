@@ -75,14 +75,6 @@ export function ProductVariantSelector({ variants, parseStrings }: ProductVarian
       }
     }
   }, [selectedColor, selectedSize, variants]);
-  console.log("selectedColor", selectedColor);
-  console.log("selectedSize", selectedSize);
-  console.log("quantity", quantity);
-  console.log("stockForSelection", stockForSelection);
-  console.log("colors", colors);
-  console.log("sizes", sizes);
-  console.log("availableSizes", availableSizes);
-  console.log("variants", variants);
   
 
   return (

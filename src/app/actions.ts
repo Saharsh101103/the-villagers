@@ -18,7 +18,7 @@ export async function createProduct(prevState: unknown, formData: FormData) {
   const user = await getUser();
 
   if (!user || user.email !== businessDetails.adminEmail) {
-    return redirect("/shop");
+    return redirect("/");
   }
 
   const submission = parseWithZod(formData, {
@@ -66,7 +66,7 @@ export async function editProduct(prevState: any, formData: FormData) {
   const user = await getUser();
 
   if (!user || user.email !== businessDetails.adminEmail) {
-    return redirect("/shop");
+    return redirect("/");
   }
 
   const submission = parseWithZod(formData, {
@@ -110,7 +110,7 @@ export async function deleteProduct(formData: FormData) {
   const user = await getUser();
 
   if (!user || user.email !== businessDetails.adminEmail) {
-    return redirect("/shop");
+    return redirect("/");
   }
 
   await prisma.product.delete({
@@ -127,7 +127,7 @@ export async function createBanner(prevState: any, formData: FormData) {
   const user = await getUser();
 
   if (!user || user.email !== businessDetails.adminEmail) {
-    return redirect("/shop");
+    return redirect("/");
   }
 
   const submission = parseWithZod(formData, {
@@ -153,7 +153,7 @@ export async function deleteBanner(formData: FormData) {
   const user = await getUser();
 
   if (!user || user.email !== businessDetails.adminEmail) {
-    return redirect("/shop");
+    return redirect("/");
   }
 
   await prisma.banner.delete({
@@ -170,7 +170,7 @@ export async function deleteBanner(formData: FormData) {
 //   const user = await getUser();
 
 //   if (!user) {
-//     return redirect("/shop");
+//     return redirect("/");
 //   }
 
 //   let cart: Cart | null = await redis.get(`cart-${user.id}`);
@@ -230,7 +230,7 @@ export async function deleteBanner(formData: FormData) {
 
 //   await redis.set(`cart-${user.id}`, myCart);
 
-//   revalidatePath("/shop", "layout");
+//   revalidatePath("/", "layout");
 // }
 
 
@@ -240,7 +240,7 @@ export async function deleteBanner(formData: FormData) {
 //   const user = await getUser();
 
 //   if (!user) {
-//     return redirect("/shop");
+//     return redirect("/");
 //   }
 
 //   // Retrieve the cart from Redis
@@ -270,7 +270,7 @@ export async function deleteBanner(formData: FormData) {
 //   await redis.set(`cart-${user.id}`, cart);
 
 //   // Revalidate the path to ensure the UI reflects the changes
-//   revalidatePath("/shop", "layout");
+//   revalidatePath("/", "layout");
 // }
 
 
@@ -279,7 +279,7 @@ export async function deleteBanner(formData: FormData) {
 //   const user = await getUser();
 
 //   if (!user) {
-//     return redirect("/shop");
+//     return redirect("/");
 //   }
 
 //   const productId = formData.get("productId");
@@ -295,7 +295,7 @@ export async function deleteBanner(formData: FormData) {
 //     await redis.set(`cart-${user.id}`, updateCart);
 //   }
 
-//   revalidatePath("/shop/bag");
+//   revalidatePath("//bag");
 // }
 
 // export async function checkOutWithStripe() {
@@ -303,7 +303,7 @@ export async function deleteBanner(formData: FormData) {
 //   const user = await getUser();
 
 //   if (!user) {
-//     return redirect("/shop");
+//     return redirect("/");
 //   }
 
 //   let cart: Cart | null = await redis.get(`cart-${user.id}`);
@@ -327,12 +327,12 @@ export async function deleteBanner(formData: FormData) {
 //       line_items: lineItems,
 //       success_url:
 //         process.env.NODE_ENV === "development"
-//           ? "http://localhost:3000/shop/payment/success"
-//           : "https://deployment-url/shop/payment/success",
+//           ? "http://localhost:3000//payment/success"
+//           : "https://deployment-url//payment/success",
 //       cancel_url:
 //         process.env.NODE_ENV === "development"
-//           ? "http://localhost:3000/shop/payment/cancel"
-//           : "https://deployment-url/shop/payment/cancel",
+//           ? "http://localhost:3000//payment/cancel"
+//           : "https://deployment-url//payment/cancel",
 //       metadata: {
 //         userId: user.id,
 //       },

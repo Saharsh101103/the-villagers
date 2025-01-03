@@ -43,7 +43,7 @@ export function SizeSelector({ sizes, availableSizes, defaultSize, onSizeChange 
               htmlFor={`size-${size}`}
               className={cn(availableSizes.includes(size) ? "px-4 py-2 border rounded-md peer-data-[state=checked]:bg-primary peer-data-[state=checked]:text-primary-foreground hover:bg-muted cursor-pointer" : " px-4 py-2 border rounded-md peer-data-[state=checked]:bg-primary peer-data-[state=checked]:text-primary-foreground hover:bg-muted cursor-not-allowed line-through text-destructive")}
             >
-              {size}
+              {size.toUpperCase()}
             </Label>
           </div>
         ))}
